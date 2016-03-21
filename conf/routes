@@ -5,7 +5,8 @@
 # Home page
 GET     /                           controllers.Application.index
 
-GET     /rating                     controllers.Application.sampleRating
+GET     /flavor                     controllers.Application.sampleFlavor
+GET     /roasting                   controllers.Application.sampleRoasting
 GET     /ratings                    controllers.Application.listRatings
 
 # Map static resources from the /public folder to the /assets URL path
