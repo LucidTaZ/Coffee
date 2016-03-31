@@ -1,0 +1,12 @@
+@(flavor: Flavor, roastings: List[Roasting])
+@main("Coffee") {
+
+    <h2>@flavor.name</h2>
+
+    <ul>
+        @for(roasting <- roastings) {
+            <li>@roasting.formatDuration</li>
+        }
+    </ul>
+
+}
