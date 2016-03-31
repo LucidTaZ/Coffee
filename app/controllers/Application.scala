@@ -10,8 +10,10 @@ import scala.collection.immutable.Map
 class Application extends Controller {
 
   def index = Action {
-    Ok(views.html.Application.index("Your new application is ready."))
+    Ok(views.html.Application.index())
   }
+
+  def allFlavors = TODO
 
   def sampleRoasting = Action {
     val roastingWithRatings = generateSampleRoasting
@@ -26,8 +28,6 @@ class Application extends Controller {
     val flavor = roasting.flavor
     Ok(views.html.Application.flavor(flavor, List(roasting)))
   }
-
-  def listRatings = TODO
 
   private def generateSampleRoastings: List[Tuple2[Roasting, Rating]] = {
     return List(generateSampleRoasting)
