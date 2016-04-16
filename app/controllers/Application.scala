@@ -14,7 +14,7 @@ class Application extends Controller {
   }
 
   def debug = Action {
-    val flavors = Flavor.listPlain
+    val flavors = Flavor.list
     Ok(views.html.Application.debug(flavors))
   }
 

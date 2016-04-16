@@ -14,26 +14,18 @@ case class Flavor(
 
 object Flavor {
   // Example: https://github.com/typesafehub/activator-hello-slick/blob/slick-3.1/src/main/scala/Tables.scala
-  class FlavorTable(tag: Tag) extends Table[(Long, String)](tag, "FLAVOR") {
+  class FlavorTable(tag: Tag) extends Table[Flavor](tag, "FLAVOR") {
     def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
     def name = column[String]("NAME")
-    def * = (id, name)
+    def * = (id.?, name) <> ((Flavor.apply _).tupled, Flavor.unapply) // https://github.com/VirtusLab/unicorn/issues/11 and http://queirozf.com/entries/slick-error-message-value-tupled-is-not-a-member-of-object
   }
   val flavors = TableQuery[FlavorTable]
   
-  def listPlain: Seq[(Long, String)] = {
+  def list: Seq[Flavor] = {
     val db = Database.forConfig("mycoffee")
 
-    var result = Seq[(Long, String)]()
+    var result = Seq[Flavor]()
     Await.ready(db.run(flavors.result.map{rows => result = rows}), Duration.Inf)
     result
   }
-  
-//  def list: Seq[Flavor] = {
-//    val db = Database.forConfig("mycoffee")
-
-//    var result = Seq[Flavor]()
-//    Await.ready(db.run(flavors.result.map{rows => result = rows}), Duration.Inf)
-//    result
-//  }
 }
