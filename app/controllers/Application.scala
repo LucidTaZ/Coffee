@@ -38,26 +38,27 @@ class Application @Inject()(dbConfigProvider: DatabaseConfigProvider) extends Co
 
   def sampleRoasting = Action {
     val roastingWithRatings = generateSampleRoasting
-    val roasting = roastingWithRatings._1
-    val ratings = roastingWithRatings._2
-    Ok(views.html.Application.roasting(roasting, ratings))
+    val flavor = roastingWithRatings._1
+    val roasting = roastingWithRatings._2
+    val ratings = roastingWithRatings._3
+    Ok(views.html.Application.roasting(flavor, roasting, ratings))
   }
 
   def sampleFlavor = Action {
     val roastingWithRatings = generateSampleRoasting
-    val roasting = roastingWithRatings._1
-    val flavor = roasting.flavor
+    val flavor = roastingWithRatings._1
+    val roasting = roastingWithRatings._2
     Ok(views.html.Application.flavor(flavor, List(roasting)))
   }
 
-  private def generateSampleRoastings: List[Tuple2[Roasting, Rating]] = {
+  private def generateSampleRoastings: List[Tuple3[Flavor, Roasting, Rating]] = {
     return List(generateSampleRoasting)
   }
 
-  private def generateSampleRoasting: Tuple2[Roasting, Rating] = {
+  private def generateSampleRoasting: Tuple3[Flavor, Roasting, Rating] = {
     val flavor = Flavor(None, "Yellow Bourbon")
-    val roasting = new Roasting(flavor, java.time.Duration.ofSeconds(Random.nextInt(200) + 300), Some("Blop"))
-    val rating = new Rating(Random.nextFloat(), Some("Blap"))
-    return Tuple2(roasting, rating);
+    val roasting = Roasting(None, 0, java.time.Duration.ofSeconds(Random.nextInt(200) + 300), Some("Blop"))
+    val rating = Rating(None, Random.nextFloat(), Some("Blap"))
+    return Tuple3(flavor, roasting, rating);
   }
 }

@@ -1,7 +1,7 @@
-@(roasting: Roasting, rating: Rating)
+@(flavor: Flavor, roasting: Roasting, rating: Rating)
 @main("Coffee") {
 
-    <h2>@roasting.flavor.name</h2>
+    <h2>@flavor.name</h2>
 
     <ul>
         <li>Roast time: @roasting.formatDuration</li>
