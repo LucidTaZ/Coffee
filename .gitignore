@@ -11,5 +11,6 @@ target
 /.cache-tests
 /.sbtserver
 /bin
+/db
 /project/.sbtserver
 /project/.sbtserver.lock

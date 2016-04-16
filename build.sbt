@@ -7,10 +7,14 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
 scalaVersion := "2.11.6"
 
 libraryDependencies ++= Seq(
-  jdbc,
   cache,
   ws,
-  specs2 % Test
+  specs2 % Test,
+  "com.typesafe.slick" %% "slick" % "3.1.1",
+  "com.typesafe.slick" %% "slick-hikaricp" % "3.1.0", // https://github.com/slick/slick/issues/1330
+//  "com.typesafe.slick" %% "slick-evolutions" % "3.1.1",
+  "org.slf4j" % "slf4j-nop" % "1.6.4",
+  "com.h2database" % "h2" % "1.3.148"
 )
 
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
