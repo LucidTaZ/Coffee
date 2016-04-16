@@ -11,13 +11,18 @@ import java.time.Duration
 class UnitSpec extends Specification {
   "Flavor" should {
     "accept a name" in {
-      val flavor = Flavor("Yellow Bourbon")
+      val flavor = Flavor(None, "Yellow Bourbon")
       flavor.name must equalTo("Yellow Bourbon")
     }
+// Commented out because Unit testing against the DB is not trivial (and probably not desirable either)
+//    "be able to query the database" in {
+//      val flavors = Flavor.list
+//      flavors.length must greaterThan(0)
+//    }
   }
 
   "Roasting" should {
-    val flavor = Flavor("a");
+    val flavor = Flavor(None, "a");
     "format its duration nicely" in {
       new Roasting(flavor, Duration.ZERO).formatDuration must equalTo("PT0S") // Temporary formatting
     }
@@ -28,7 +33,7 @@ class UnitSpec extends Specification {
   }
 
   "Rating" should {
-    val flavor = Flavor("a");
+    val flavor = Flavor(None, "a");
     val roasting = new Roasting(flavor, Duration.ZERO);
     "calculate stars correctly" in {
       new Rating(0.0f).nStars must equalTo(0.0f)

@@ -39,7 +39,7 @@ class Application extends Controller {
   }
 
   private def generateSampleRoasting: Tuple2[Roasting, Rating] = {
-    val flavor = Flavor("Yellow Bourbon")
+    val flavor = Flavor(None, "Yellow Bourbon")
     val roasting = new Roasting(flavor, Duration.ofSeconds(Random.nextInt(200) + 300), Some("Blop"))
     val rating = new Rating(Random.nextFloat(), Some("Blap"))
     return Tuple2(roasting, rating);
