@@ -3,9 +3,12 @@ package controllers
 import models._
 import play.api._
 import play.api.mvc._
-import java.time.Duration
 import scala.util.Random
 import scala.collection.immutable.Map
+import scala.concurrent.Await
+import scala.concurrent.duration.Duration
+import slick.driver.H2Driver.api._
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class Application extends Controller {
 
@@ -14,7 +17,9 @@ class Application extends Controller {
   }
 
   def debug = Action {
-    val flavors = Flavor.list
+    var flavors = Seq[Flavor]()
+    Await.ready(db.run(Flavors.flavors.result.map{rows => flavors = rows}), Duration.Inf)
+    
     Ok(views.html.Application.debug(flavors))
   }
 
@@ -40,8 +45,10 @@ class Application extends Controller {
 
   private def generateSampleRoasting: Tuple2[Roasting, Rating] = {
     val flavor = Flavor(None, "Yellow Bourbon")
-    val roasting = new Roasting(flavor, Duration.ofSeconds(Random.nextInt(200) + 300), Some("Blop"))
+    val roasting = new Roasting(flavor, java.time.Duration.ofSeconds(Random.nextInt(200) + 300), Some("Blop"))
     val rating = new Rating(Random.nextFloat(), Some("Blap"))
     return Tuple2(roasting, rating);
   }
+
+  private def db = Database.forConfig("mycoffee")
 }
