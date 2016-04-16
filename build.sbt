@@ -10,9 +10,8 @@ libraryDependencies ++= Seq(
   cache,
   ws,
   specs2 % Test,
-  "com.typesafe.slick" %% "slick" % "3.1.1",
-  "com.typesafe.slick" %% "slick-hikaricp" % "3.1.0", // https://github.com/slick/slick/issues/1330
-//  "com.typesafe.slick" %% "slick-evolutions" % "3.1.1",
+  "com.typesafe.play" %% "play-slick" % "1.1.1",
+  "com.typesafe.play" %% "play-slick-evolutions" % "1.1.1",
   "org.slf4j" % "slf4j-nop" % "1.6.4",
   "com.h2database" % "h2" % "1.3.148"
 )
