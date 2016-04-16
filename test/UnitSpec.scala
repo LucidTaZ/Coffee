@@ -14,11 +14,6 @@ class UnitSpec extends Specification {
       val flavor = Flavor(None, "Yellow Bourbon")
       flavor.name must equalTo("Yellow Bourbon")
     }
-// Commented out because Unit testing against the DB is not trivial (and probably not desirable either)
-//    "be able to query the database" in {
-//      val flavors = Flavor.list
-//      flavors.length must greaterThan(0)
-//    }
   }
 
   "Roasting" should {

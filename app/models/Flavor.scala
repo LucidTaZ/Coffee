@@ -12,12 +12,13 @@ case class Flavor(
   name: String
 )
 
-object Flavors {
-  // Example: https://github.com/typesafehub/activator-hello-slick/blob/slick-3.1/src/main/scala/Tables.scala
-  class FlavorTable(tag: Tag) extends Table[Flavor](tag, "FLAVOR") {
+// Example: https://github.com/typesafehub/activator-hello-slick/blob/slick-3.1/src/main/scala/Tables.scala
+class Flavors(tag: Tag) extends Table[Flavor](tag, "FLAVOR") {
     def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
     def name = column[String]("NAME")
     def * = (id.?, name) <> (Flavor.tupled, Flavor.unapply)
-  }
-  val flavors = TableQuery[FlavorTable]
+}
+
+object Flavors {
+  val flavors = TableQuery[Flavors]
 }
