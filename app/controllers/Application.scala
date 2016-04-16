@@ -17,10 +17,12 @@ class Application extends Controller {
   }
 
   def debug = Action {
-    var flavors = Seq[Flavor]()
-    Await.ready(db.run(Flavors.flavors.result.map{rows => flavors = rows}), Duration.Inf)
+    val query: TableQuery[Flavors] = Flavors.flavors
+    val action = query.result
+    val futureResults/*: Future[Seq[Flavors.TableElementType]]*/ = db.run(action)
+    val awaitedResults: Seq[Flavor] = Await.result(futureResults, Duration.Inf)
     
-    Ok(views.html.Application.debug(flavors))
+    Ok(views.html.Application.debug(awaitedResults))
   }
 
   def allFlavors = TODO
