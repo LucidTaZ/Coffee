@@ -5,6 +5,8 @@
 # Home page
 GET     /                           controllers.Application.index
 
+GET     /debug                      controllers.Application.debug
+
 GET     /flavors                    controllers.Application.allFlavors
 GET     /flavor                     controllers.Application.sampleFlavor
 GET     /roasting                   controllers.Application.sampleRoasting

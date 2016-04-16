@@ -13,6 +13,11 @@ class Application extends Controller {
     Ok(views.html.Application.index())
   }
 
+  def debug = Action {
+    val flavors = Flavor.listPlain
+    Ok(views.html.Application.debug(flavors))
+  }
+
   def allFlavors = TODO
 
   def sampleRoasting = Action {
