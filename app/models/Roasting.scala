@@ -20,6 +20,8 @@ class Roastings(tag: Tag) extends Table[Roasting](tag, "ROASTING") {
 
   def duration = (duration_seconds) <>[Duration, Int] (Duration.ofSeconds(_), d => Some(d.getSeconds().toInt))
   def * = (id.?, flavor_id, duration, comment.?) <> (Roasting.tupled, Roasting.unapply)
+
+  def flavor = foreignKey("FLAVOR", flavor_id, Flavors.flavors)(_.id)
 }
 
 object Roastings {

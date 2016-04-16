@@ -16,6 +16,7 @@ import slick.driver.H2Driver.api.TableQuery
 import slick.driver.H2Driver.api.streamableQueryActionExtensionMethods
 import slick.driver.JdbcProfile
 import slick.backend.DatabaseConfig
+import models.Roastings
 
 class Application @Inject()(dbConfigProvider: DatabaseConfigProvider) extends Controller {
 
@@ -26,12 +27,18 @@ class Application @Inject()(dbConfigProvider: DatabaseConfigProvider) extends Co
   def debug = Action {
     val dbConfig: DatabaseConfig[JdbcProfile] = dbConfigProvider.get[JdbcProfile]
     val database: Database = dbConfig.db
-    val query: TableQuery[Flavors] = Flavors.flavors
-    val action = query.result
-    val futureResults/*: Future[Seq[Flavors.TableElementType]]*/ = database.run(action)
-    val awaitedResults: Seq[Flavor] = Await.result(futureResults, Duration.Inf)
-    
-    Ok(views.html.Application.debug(awaitedResults))
+
+    val roastingsQuery = Roastings.roastings
+    val roastingsAction = roastingsQuery.result
+    val roastingsFutureResults/*: Future[Seq[Flavors.TableElementType]]*/ = database.run(roastingsAction)
+    val roastings: Seq[Roasting] = Await.result(roastingsFutureResults, Duration.Inf)
+
+    val flavorQuery = Roastings.roastings.flatMap(_.flavor)
+    val flavorAction = flavorQuery.result
+    val flavorFutureResult = database.run(flavorAction)
+    val flavors: Seq[Flavor] = Await.result(flavorFutureResult, Duration.Inf)
+
+    Ok(views.html.Application.debug(flavors, roastings))
   }
 
   def allFlavors = TODO
