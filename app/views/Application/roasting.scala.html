@@ -1,11 +1,14 @@
-@(flavor: Flavor, roasting: Roasting, rating: Rating)
+@(flavor: Flavor, roasting: Roasting, ratingOption: Option[Rating])
 @main("Coffee") {
 
     <h2>@flavor.name</h2>
 
     <ul>
         <li>Roast time: @roasting.formatDuration</li>
-        <li>Rating: @rating.nStars stars</li>
+        <li>Rating: @{ratingOption match {
+            case None => "None yet"
+            case Some(rating) => rating.nStars + " stars"
+        }}</li>
     </ul>
 
     <p>
@@ -13,17 +16,22 @@
             case None =>
                 "No roasting comment"
             case Some(x) =>
-                "Roasting comment: " ++ x
+                "Roasting comment: " + x
         }}
     </p>
 
-    <p>
-        @{rating.comment match {
-            case None =>
-                "No rating comment"
-            case Some(x) =>
-                "Rating comment: " ++ x
-        }}
-    </p>
+    @{ratingOption match {
+        case None =>
+        case Some(rating) => {
+            <p>
+                @{rating.comment match {
+                    case None =>
+                        "No rating comment"
+                    case Some(x) =>
+                        "Rating comment: " + x
+                }}
+            </p>
+        }
+    }}
 
 }

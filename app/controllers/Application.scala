@@ -62,12 +62,20 @@ class Application @Inject()(dbConfigProvider: DatabaseConfigProvider) extends Co
     }
   }
 
-  def sampleRoasting = Action {
-    val roastingWithRatings = generateSampleRoasting
-    val flavor = roastingWithRatings._1
-    val roasting = roastingWithRatings._2
-    val ratings = roastingWithRatings._3
-    Ok(views.html.Application.roasting(flavor, roasting, ratings))
+  def roasting(id: Long) = Action {
+    val database = dbConfigProvider.get[JdbcProfile].db
+    val roastingQuery = Roastings.queryById(id)
+    val roastingOption = Await.result(database.run(roastingQuery.result.headOption), Duration.Inf)
+    
+    roastingOption match {
+      case None => NotFound("Not found")
+      case Some(roasting) => {
+        val flavorQuery = roastingQuery.flatMap { _.flavor }
+        val flavor = Await.result(database.run(flavorQuery.result.head), Duration.Inf)
+        val rating = Some(generateSampleRoasting._3)
+        Ok(views.html.Application.roasting(flavor, roasting, rating))
+      }
+    }
   }
 
   private def generateSampleRoastings: List[Tuple3[Flavor, Roasting, Rating]] = {
