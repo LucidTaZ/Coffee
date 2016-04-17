@@ -5,7 +5,6 @@ import slick.driver.H2Driver.api._
 
 case class Roasting(
   id: Option[Long] = None,
-  flavor_id: Long,
   duration: Duration,
   comment: Option[String]
 ) {
@@ -19,7 +18,7 @@ class Roastings(tag: Tag) extends Table[Roasting](tag, "ROASTING") {
   def comment = column[String]("COMMENT")
 
   def duration = (duration_seconds) <>[Duration, Int] (Duration.ofSeconds(_), d => Some(d.getSeconds().toInt))
-  def * = (id.?, flavor_id, duration, comment.?) <> (Roasting.tupled, Roasting.unapply)
+  def * = (id.?, duration, comment.?) <> (Roasting.tupled, Roasting.unapply)
 
   def flavor = foreignKey("FLAVOR", flavor_id, Flavors.flavors)(_.id)
 }

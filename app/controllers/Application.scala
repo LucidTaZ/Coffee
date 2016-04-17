@@ -31,7 +31,7 @@ class Application @Inject()(dbConfigProvider: DatabaseConfigProvider) extends Co
 
     val roastingsQuery = Roastings.roastings
     val roastingsAction = roastingsQuery.result
-    val roastingsFutureResults/*: Future[Seq[Flavors.TableElementType]]*/ = database.run(roastingsAction)
+    val roastingsFutureResults/*: Future[Seq[Roastings.TableElementType]]*/ = database.run(roastingsAction)
     val roastings: Seq[Roasting] = Await.result(roastingsFutureResults, Duration.Inf)
 
     val flavorQuery = Roastings.roastings.flatMap(_.flavor)
