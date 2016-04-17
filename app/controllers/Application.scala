@@ -17,6 +17,7 @@ import slick.driver.H2Driver.api.streamableQueryActionExtensionMethods
 import slick.driver.JdbcProfile
 import slick.backend.DatabaseConfig
 import models.Roastings
+import models.Ratings
 
 class Application @Inject()(dbConfigProvider: DatabaseConfigProvider) extends Controller {
 
@@ -72,20 +73,10 @@ class Application @Inject()(dbConfigProvider: DatabaseConfigProvider) extends Co
       case Some(roasting) => {
         val flavorQuery = roastingQuery.flatMap { _.flavor }
         val flavor = Await.result(database.run(flavorQuery.result.head), Duration.Inf)
-        val rating = Some(generateSampleRoasting._3)
+        val ratingQuery = Ratings.queryByRoasting(roasting)
+        val rating = Await.result(database.run(ratingQuery.result.headOption), Duration.Inf)
         Ok(views.html.Application.roasting(flavor, roasting, rating))
       }
     }
-  }
-
-  private def generateSampleRoastings: List[Tuple3[Flavor, Roasting, Rating]] = {
-    return List(generateSampleRoasting)
-  }
-
-  private def generateSampleRoasting: Tuple3[Flavor, Roasting, Rating] = {
-    val flavor = Flavor(None, "Yellow Bourbon")
-    val roasting = Roasting(None, 0, java.time.Duration.ofSeconds(Random.nextInt(200) + 300), Some("Blop"))
-    val rating = Rating(None, Random.nextFloat(), Some("Blap"))
-    return Tuple3(flavor, roasting, rating);
   }
 }
