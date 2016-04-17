@@ -10,6 +10,7 @@ case class Roasting(
   comment: Option[String]
 ) {
   def formatDuration: String = duration.toString()
+  val flavorQuery = Flavors.queryById(flavor_id)
 }
 
 class Roastings(tag: Tag) extends Table[Roasting](tag, "ROASTING") {
@@ -25,5 +26,6 @@ class Roastings(tag: Tag) extends Table[Roasting](tag, "ROASTING") {
 }
 
 object Roastings {
-  def roastings = TableQuery[Roastings]
+  val roastings = TableQuery[Roastings]
+  def queryByFlavor(flavor: Flavor) = Roastings.roastings.filter { _.flavor_id === flavor.id }
 }

@@ -5,7 +5,9 @@ import slick.driver.H2Driver.api._
 case class Flavor(
   id: Option[Long] = None,
   name: String
-)
+) {
+  val roastingsQuery = Roastings.queryByFlavor(this)
+}
 
 // Example: https://github.com/typesafehub/activator-hello-slick/blob/slick-3.1/src/main/scala/Tables.scala
 class Flavors(tag: Tag) extends Table[Flavor](tag, "FLAVOR") {
@@ -16,4 +18,5 @@ class Flavors(tag: Tag) extends Table[Flavor](tag, "FLAVOR") {
 
 object Flavors {
   val flavors = TableQuery[Flavors]
+  def queryById(id: Long) = flavors.filter(_.id === id)
 }

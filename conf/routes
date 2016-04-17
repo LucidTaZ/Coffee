@@ -7,8 +7,8 @@ GET     /                           controllers.Application.index
 
 GET     /debug                      controllers.Application.debug
 
-GET     /flavors                    controllers.Application.allFlavors
-GET     /flavor                     controllers.Application.sampleFlavor
+GET     /flavors                    controllers.Application.flavors
+GET     /flavor/:id                 controllers.Application.flavor(id: Long)
 GET     /roasting                   controllers.Application.sampleRoasting
 
 # Map static resources from the /public folder to the /assets URL path

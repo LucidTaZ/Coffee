@@ -41,7 +41,26 @@ class Application @Inject()(dbConfigProvider: DatabaseConfigProvider) extends Co
     Ok(views.html.Application.debug(flavors, roastings))
   }
 
-  def allFlavors = TODO
+  def flavors = Action {
+    val database = dbConfigProvider.get[JdbcProfile].db
+    val flavors = Await.result(database.run(Flavors.flavors.result), Duration.Inf)
+    Ok(views.html.Application.flavors(flavors))
+  }
+
+  def flavor(id: Long) = Action {
+    val database = dbConfigProvider.get[JdbcProfile].db
+    val flavorQuery = Flavors.queryById(id)
+    val flavorOption = Await.result(database.run(flavorQuery.result.headOption), Duration.Inf)
+    
+    flavorOption match {
+      case None => NotFound("Not found")
+      case Some(flavor) => {
+        val roastingsQuery = flavor.roastingsQuery
+        val roastings = Await.result(database.run(roastingsQuery.result), Duration.Inf)
+        Ok(views.html.Application.flavor(flavor, roastings))
+      }
+    }
+  }
 
   def sampleRoasting = Action {
     val roastingWithRatings = generateSampleRoasting
@@ -49,13 +68,6 @@ class Application @Inject()(dbConfigProvider: DatabaseConfigProvider) extends Co
     val roasting = roastingWithRatings._2
     val ratings = roastingWithRatings._3
     Ok(views.html.Application.roasting(flavor, roasting, ratings))
-  }
-
-  def sampleFlavor = Action {
-    val roastingWithRatings = generateSampleRoasting
-    val flavor = roastingWithRatings._1
-    val roasting = roastingWithRatings._2
-    Ok(views.html.Application.flavor(flavor, List(roasting)))
   }
 
   private def generateSampleRoastings: List[Tuple3[Flavor, Roasting, Rating]] = {

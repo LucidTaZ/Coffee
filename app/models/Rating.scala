@@ -21,5 +21,5 @@ class Ratings(tag: Tag) extends Table[Rating](tag, "RATING") {
 }
 
 object Ratings {
-  def ratings = TableQuery[Ratings]
+  val ratings = TableQuery[Ratings]
 }
