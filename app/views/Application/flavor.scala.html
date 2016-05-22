@@ -1,11 +1,11 @@
-@(flavor: Flavor, roastings: List[Roasting])
+@(flavor: Flavor, roastings: Seq[Roasting])
 @main("Coffee") {
 
     <h2>@flavor.name</h2>
 
     <ul>
         @for(roasting <- roastings) {
-            <li>@roasting.formatDuration</li>
+            <li><a href="/roasting/@roasting.id">@roasting.formatDuration</a></li>
         }
     </ul>
 
