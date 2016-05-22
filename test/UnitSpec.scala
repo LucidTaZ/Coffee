@@ -17,7 +17,7 @@ class UnitSpec extends Specification {
   }
 
   "Roasting" should {
-    val flavor = Flavor(None, "a");
+    val flavor = Flavor(None, "a")
     "format its duration nicely" in {
       Roasting(None, Duration.ZERO, None).formatDuration must equalTo("PT0S") // Temporary formatting
     }
@@ -28,8 +28,7 @@ class UnitSpec extends Specification {
   }
 
   "Rating" should {
-    val flavor = Flavor(None, "a");
-    val roasting = Roasting(None, Duration.ZERO, None);
+    val flavor = Flavor(None, "a")
     "calculate stars correctly" in {
       Rating(None, 0.0f).nStars must equalTo(0.0f)
       Rating(None, 0.1f).nStars must equalTo(0.5f)

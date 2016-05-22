@@ -8,7 +8,7 @@ case class Roasting(
   duration: Duration,
   comment: Option[String]
 ) {
-  val formatDuration: String = duration.toString()
+  val formatDuration: String = duration.toString
 }
 
 class Roastings(tag: Tag) extends Table[Roasting](tag, "ROASTING") {
@@ -17,7 +17,7 @@ class Roastings(tag: Tag) extends Table[Roasting](tag, "ROASTING") {
   def duration_seconds = column[Int]("DURATION_SECONDS")
   def comment = column[String]("COMMENT")
 
-  def duration = (duration_seconds) <>[Duration, Int] (Duration.ofSeconds(_), d => Some(d.getSeconds().toInt))
+  def duration = (duration_seconds) <>[Duration, Int] (Duration.ofSeconds(_), d => Some(d.getSeconds.toInt))
   def * = (id.?, duration, comment.?) <> (Roasting.tupled, Roasting.unapply)
 
   def flavor = foreignKey("FLAVOR", flavor_id, Flavors.flavors)(_.id)
