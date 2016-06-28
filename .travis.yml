@@ -3,3 +3,7 @@ scala:
   - 2.11.6
 jdk:
   - oraclejdk8
+
+# Warm up everything to prevent timeouts during the real test. Simply run the test suite once.
+before_script:
+  - sbt ++$TRAVIS_SCALA_VERSION test || true
