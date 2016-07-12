@@ -1,11 +1,11 @@
 @(flavors: Seq[Flavor])
-@main("Coffee") {
+@views.html.Application.main("Coffee") {
 
     <h2>Flavors</h2>
 
     <ul>
         @for(flavor <- flavors) {
-            <li><a href="/flavor/@flavor.id">@flavor.name</a></li>
+            <li><a href="/flavors/@flavor.id">@flavor.name</a></li>
         }
     </ul>
 

@@ -40,42 +40,4 @@ class Application @Inject()(dbConfigProvider: DatabaseConfigProvider) extends Co
 
     Ok(views.html.Application.debug(flavors, roastings))
   }
-
-  def flavors = Action {
-    val database = dbConfigProvider.get[JdbcProfile].db
-    val flavors = Await.result(database.run(Flavors.flavors.result), Duration.Inf)
-    Ok(views.html.Application.flavors(flavors))
-  }
-
-  def flavor(id: Long) = Action {
-    val database = dbConfigProvider.get[JdbcProfile].db
-    val flavorQuery = Flavors.queryById(id)
-    val flavorOption = Await.result(database.run(flavorQuery.result.headOption), Duration.Inf)
-    
-    flavorOption match {
-      case None => NotFound("Not found")
-      case Some(flavor) => {
-        val roastingsQuery = flavor.roastingsQuery
-        val roastings = Await.result(database.run(roastingsQuery.result), Duration.Inf)
-        Ok(views.html.Application.flavor(flavor, roastings))
-      }
-    }
-  }
-
-  def roasting(id: Long) = Action {
-    val database = dbConfigProvider.get[JdbcProfile].db
-    val roastingQuery = Roastings.queryById(id)
-    val roastingOption = Await.result(database.run(roastingQuery.result.headOption), Duration.Inf)
-    
-    roastingOption match {
-      case None => NotFound("Not found")
-      case Some(roasting) => {
-        val flavorQuery = roastingQuery.flatMap { _.flavor }
-        val flavor = Await.result(database.run(flavorQuery.result.head), Duration.Inf)
-        val ratingQuery = Ratings.queryByRoasting(roasting)
-        val rating = Await.result(database.run(ratingQuery.result.headOption), Duration.Inf)
-        Ok(views.html.Application.roasting(flavor, roasting, rating))
-      }
-    }
-  }
 }
