@@ -10,6 +10,8 @@ import models.Roasting
 import play.api.i18n.Messages
 import play.api.i18n.Lang
 import controllers.FlavorsController
+import models.Roasting
+import models.Rating
 
 @RunWith(classOf[JUnitRunner])
 class ApplicationSpec extends Specification {
@@ -33,7 +35,9 @@ class ApplicationSpec extends Specification {
       val html = views.html.Application.index()
       contentAsString(html) must contain ("/flavors")
     }
+  }
 
+  "Flavors" should {
     "render the flavors page" in new WithApplication{
       val flavorsPage = route(FakeRequest(GET, "/flavors")).get
 
@@ -41,9 +45,7 @@ class ApplicationSpec extends Specification {
       contentType(flavorsPage) must beSome.which(_ == "text/html")
       contentAsString(flavorsPage) must contain ("Flavors")
     }
-  }
 
-  "Flavors" should {
     "link to flavor views" in new WithApplication {
       val flavors = Seq(
         Flavor(Some(1), "Sample flavor")
@@ -62,6 +64,22 @@ class ApplicationSpec extends Specification {
       val html = views.html.FlavorsController.show(flavor, roastings)
 
       contentAsString(html) must contain ("/roastings/1")
+    }
+  }
+
+  "Roastings" should {
+    "show a roasting" in new WithApplication {
+      val flavor = Flavor(None, "Sample flavor")
+      val roasting = Roasting(None, Duration.ZERO, Some("Sample roasting comment"))
+      val rating = Rating(None, 0.5f, Some("Sample rating comment"))
+      val html = views.html.RoastingsController.show(flavor, roasting, Some(rating))
+
+      contentAsString(html) must contain ("Sample flavor")
+      contentAsString(html) must contain ("Roast time:")
+      contentAsString(html) must contain ("Roasting comment: Sample roasting comment")
+      contentAsString(html) must contain ("Rating:")
+      contentAsString(html) must contain ("stars")
+      contentAsString(html) must contain ("Rating comment: Sample rating comment")
     }
   }
 }
