@@ -5,7 +5,7 @@
 
     <ul>
         @for(roasting <- roastings) {
-            <li><a href="/roastings/@roasting.id">@roasting.formatDuration</a></li>
+            <li><a href="@routes.RoastingsController.show(roasting.id.get)">@roasting.formatDuration</a></li>
         }
     </ul>
 
