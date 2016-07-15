@@ -4,17 +4,32 @@ import javax.inject.Inject
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.mvc.Action
 import play.api.mvc.Controller
+import play.api.data.Form
+import play.api.data.Forms._
 import slick.driver.JdbcProfile
 import slick.driver.H2Driver.api.streamableQueryActionExtensionMethods
 import models.Flavors
 import scala.concurrent.duration.Duration
 import scala.concurrent.Await
+import models.Flavor
+import play.api.i18n.MessagesApi
+import play.api.i18n.I18nSupport
 
-class FlavorsController @Inject()(dbConfigProvider: DatabaseConfigProvider) extends Controller {
+object FlavorsController {
+  val form = Form(
+    mapping(
+      "id" -> optional(longNumber),
+      "name" -> nonEmptyText
+    )
+    (Flavor.apply)(Flavor.unapply)
+  )
+}
+
+class FlavorsController @Inject()(dbConfigProvider: DatabaseConfigProvider, val messagesApi: MessagesApi) extends Controller with I18nSupport {
   def list = Action {
     val database = dbConfigProvider.get[JdbcProfile].db
     val flavors = Await.result(database.run(Flavors.flavors.result), Duration.Inf)
-    Ok(views.html.FlavorsController.list(flavors))
+    Ok(views.html.FlavorsController.list(flavors, FlavorsController.form))
   }
 
   def show(id: Long) = Action {
@@ -31,4 +46,6 @@ class FlavorsController @Inject()(dbConfigProvider: DatabaseConfigProvider) exte
       }
     }
   }
+
+  def create = TODO
 }

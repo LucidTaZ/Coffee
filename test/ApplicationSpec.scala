@@ -7,6 +7,9 @@ import models.Flavor
 import models.Flavor
 import java.time.Duration
 import models.Roasting
+import play.api.i18n.Messages
+import play.api.i18n.Lang
+import controllers.FlavorsController
 
 @RunWith(classOf[JUnitRunner])
 class ApplicationSpec extends Specification {
@@ -45,7 +48,8 @@ class ApplicationSpec extends Specification {
       val flavors = Seq(
         Flavor(Some(1), "Sample flavor")
       )
-      val html = views.html.FlavorsController.list(flavors)
+      val messages = Messages.Implicits.applicationMessages(Lang.defaultLang, app)
+      val html = views.html.FlavorsController.list(flavors, FlavorsController.form)(messages)
 
       contentAsString(html) must contain ("/flavors/1")
     }

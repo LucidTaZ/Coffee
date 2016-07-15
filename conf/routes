@@ -8,6 +8,7 @@ GET     /debug                      controllers.Application.debug
 
 GET     /flavors                    controllers.FlavorsController.list
 GET     /flavors/:id                controllers.FlavorsController.show(id: Long)
+POST    /flavors                    controllers.FlavorsController.create
 
 GET     /roastings/:id              controllers.RoastingsController.show(id: Long)
 

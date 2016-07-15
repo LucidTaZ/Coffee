@@ -1,4 +1,5 @@
-@(flavors: Seq[Flavor])
+@(flavors: Seq[Flavor], flavorForm: Form[Flavor])(implicit messages: Messages)
+
 @views.html.Application.main("Coffee") {
 
     <h2>Flavors</h2>
@@ -9,4 +10,11 @@
         }
     </ul>
 
+    <h3>Create new flavor</h3>
+    @helper.form(action = routes.FlavorsController.create()) {
+        <fieldset>
+            @helper.inputText(flavorForm("name"))
+        </fieldset>
+        <input type="submit" value="Create" />
+    }
 }
